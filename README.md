@@ -19,8 +19,8 @@ TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
       port: 5432, /*si tienes otro puerto configurado cambialo*/
-      username: 'postgres',/*cambialo por el usuario de posgre que tengas*/
-      password: '12345',/*cambialo por la contraseña de tu db*/
+      username: 'postgres', /*cambialo por el usuario de posgre que tengas*/
+      password: '', /*cambialo por la contraseña de tu db*/
       database: 'servernest',
       entities: [],
       synchronize: false,
