@@ -1,10 +1,30 @@
 
 # ControlAsistencia
 
+Hice unos cambios, primero debes crear la base de datos en postgresql con el nombre:
 ```
-Hi sully, I don´t know how this fuckin projectworks, I mean, gemini is everthing.
-
-buee, viste ese ingles oe, prestame plata,que no se como sirve esta vaina
+servernest
+```
+Despues dentro de pgadmin copias el script con las tablas que se encuentra en:
+```
+\nestjs\database\init.sql
+```
+Despues de crear la base de datos y crear las tablas deberas modificar la conexion en nest, dirigete a:
+```
+\nestjs\src\app.module.ts
+```
+Y cambia lo siguiente:
+```
+TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432, /*si tienes otro puerto configurado cambialo*/
+      username: 'postgres',/*cambialo por el usuario de posgre que tengas*/
+      password: '12345',/*cambialo por la contraseña de tu db*/
+      database: 'servernest',
+      entities: [],
+      synchronize: false,
+    }),
 ```
 This template should help get you started developing with Vue 3 in Vite.
 

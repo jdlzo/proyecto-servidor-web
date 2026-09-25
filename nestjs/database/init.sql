@@ -1,0 +1,41 @@
+CREATE TABLE ROL(
+	id SERIAL PRIMARY KEY,
+	nombre varchar(20) NOT NULL
+);
+CREATE TABLE HORARIOS (
+	id SERIAL PRIMARY KEY,
+	hora_entrada TIME NOT NULL,
+	hora_salida TIME NOT NULL,
+	tolerancia INT DEFAULT 10
+);
+CREATE TABLE USUARIO(
+		id SERIAL PRIMARY KEY,
+		cedula VARCHAR(10) UNIQUE NOT NULL,
+		nombreuser VARCHAR(100) NOT NULL,
+		apellido VARCHAR(100) NOT NULL,
+		contrasena VARCHAR(255) NOT NULL,
+		cargo VARCHAR(100) NOT NULL,
+		estado BOOLEAN DEFAULT true,
+		rolid INT,
+		horarioid INT,
+		CONSTRAINT usurol FOREIGN KEY (rolid) REFERENCES ROL(id) ON DELETE RESTRICT,
+		CONSTRAINT usuhorario FOREIGN KEY (horarioid) REFERENCES HORARIOS(id) ON DELETE SET NULL
+);
+CREATE TABLE JUSTIFICANTE (
+    id SERIAL PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    archivo_adjunto VARCHAR(255) NOT NULL,
+    estado VARCHAR(20) DEFAULT 'PENDIENTE' CHECK (estado IN ('PENDIENTE', 'APROBADO', 'RECHAZADO')),
+    enviado_en TIMESTAMP DEFAULT NOW(),
+    CONSTRAINT justifiusuario FOREIGN KEY (usuario_id) REFERENCES USUARIO(id) ON DELETE CASCADE
+);
+CREATE TABLE ASISTENCIA (
+    id SERIAL PRIMARY KEY,
+    usuarioid INT NOT NULL,
+    fecha DATE NOT NULL,
+    hora_entrada TIME,
+    hora_salida TIME,
+    estado VARCHAR(20) NOT NULL CHECK (estado IN ('A_TIEMPO', 'ATRASO', 'FALTA', 'JUSTIFICADO')),
+    CONSTRAINT asisusuario FOREIGN KEY (usuarioid) REFERENCES USUARIO(id) ON DELETE CASCADE,
+    CONSTRAINT usufecha UNIQUE (usuarioid, fecha)
+);
