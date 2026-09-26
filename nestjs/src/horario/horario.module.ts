@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { HorarioController } from './horario.controller';
-import { HorarioService } from './horario.service';
+import { HorarioController } from './horario.controller.js';
+import { HorarioService } from './horario.service.js';
 
 @Module({
   controllers: [HorarioController],

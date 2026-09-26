@@ -5,7 +5,7 @@ import {horario} from "../../horario/entities/horario.entity.js"
 export class usuario {
     @PrimaryGeneratedColumn()
     id: number;
-
+    
     @Column({ type: 'varchar', length: 10, unique: true })
     cedula: string;
 
