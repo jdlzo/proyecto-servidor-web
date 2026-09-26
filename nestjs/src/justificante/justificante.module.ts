@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { JustificanteController } from './justificante.controller';
-import { JustificanteService } from './justificante.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { JustificanteController } from './justificante.controller.js';
+import { JustificanteService } from './justificante.service.js';
+import { justificante } from './entities/justificante.entity.js';
 
 @Module({
-  controllers: [JustificanteController],
+  imports: [TypeOrmModule.forFeature([justificante])],
+  controllers: [JustificanteController]  ,
   providers: [JustificanteService]
 })
 export class JustificanteModule {}
