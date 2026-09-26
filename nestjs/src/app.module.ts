@@ -3,9 +3,7 @@ import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RolModule } from './rol/rol.module';
-import { HorarioModule } from './horario/horario.module';
-import { JustificanteModule } from './justificante/justificante.module';
+import { RolModule } from './rol/rol.module.js';
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 
@@ -29,8 +27,6 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       serviceId: 'nestjs',
     }),
     RolModule,
-    HorarioModule,
-    JustificanteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

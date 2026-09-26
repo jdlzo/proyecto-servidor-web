@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RolController } from './rol.controller';
+import { RolController } from './rol.controller.js';
 
 describe('RolController', () => {
   let controller: RolController;
