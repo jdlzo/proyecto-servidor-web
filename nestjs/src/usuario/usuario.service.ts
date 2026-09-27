@@ -6,9 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsuarioService {
-    update(id: number, dto: CreateUsuarioDto) {
-        throw new Error('Method not implemented.');
-    }
+    
     constructor(@InjectRepository(usuario) private readonly usuario: Repository<usuario>){}
 
     findAll(id?: number){
@@ -22,6 +20,12 @@ export class UsuarioService {
     }
 
     create (dto: CreateUsuarioDto) {return this.usuario.save(this.usuario.create(dto));}
+
+    async update(id: number, dto: CreateUsuarioDto) {
+    const user = await this.findOne(id);
+    Object.assign(user, dto);
+    return await this.usuario.save(user);
+    }
     
     async remove (id: number){
         const usuario = await this.findOne(id);
