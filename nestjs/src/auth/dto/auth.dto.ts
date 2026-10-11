@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Length, Matches } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString, Length, Matches } from 'class-validator';
 
 export class RegisterDto {
     @IsString()
@@ -20,6 +20,14 @@ export class RegisterDto {
     @IsString()
     @IsNotEmpty()
     cargo: string;
+
+    @IsOptional()
+    @IsInt()
+    rolid?: number;
+    
+    @IsOptional()
+    @IsInt()
+    horarioid?: number;
 }
 
 export class LoginDto {
