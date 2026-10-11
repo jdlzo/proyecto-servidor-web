@@ -1,8 +1,9 @@
-import { Controller, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUsuarioDto } from './dto/usuario.dto.js';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateUsuarioDto, UpdateUsuarioDto } from './dto/usuario.dto.js';
 import { usuario} from './entities/usuario.entity.js';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsuarioService {
@@ -19,18 +20,41 @@ export class UsuarioService {
         return usuario;
     }
 
-    create (dto: CreateUsuarioDto) {return this.usuario.save(this.usuario.create(dto));}
+    async create(dto: CreateUsuarioDto) {
+        const newUser = this.usuario.create({
+            ...dto,
+            contrasena: await bcrypt.hash(dto.contrasena, 12),
+        });
+        return this.toPublicUser(await this.usuario.save(newUser));
+    }
 
-    async update(id: number, dto: CreateUsuarioDto) {
+    async update(id: number, dto: UpdateUsuarioDto) {
     const user = await this.findOne(id);
-    Object.assign(user, dto);
-    return await this.usuario.save(user);
+    const updates = { ...dto };
+    if (updates.contrasena) {
+        updates.contrasena = await bcrypt.hash(updates.contrasena, 12);
+    }
+    Object.assign(user, updates);
+    return this.toPublicUser(await this.usuario.save(user));
     }
     
     async remove (id: number){
         const usuario = await this.findOne(id);
         await this.usuario.remove(usuario);
-        return usuario;
+        return this.toPublicUser(usuario);
+    }
+
+    private toPublicUser(user: usuario) {
+        return {
+            id: user.id,
+            cedula: user.cedula,
+            nombreuser: user.nombreuser,
+            apellido: user.apellido,
+            cargo: user.cargo,
+            estado: user.estado,
+            rolid: user.rolid,
+            horarioid: user.horarioid,
+        };
     }
 
 }

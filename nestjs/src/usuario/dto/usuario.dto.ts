@@ -42,3 +42,5 @@ export class CreateUsuarioDto {
     horarioid: number;
 }
 
+export class UpdateUsuarioDto extends PartialType(CreateUsuarioDto) {}
+

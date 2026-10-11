@@ -1,6 +1,7 @@
-import { Controller,Get,Post,Patch,Body,Param,Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller,Get,Post,Patch,Body,Param,Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { RolService } from './rol.service.js';
 import { CreateRolDto } from './dto/rol.dto.js';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 
 @Controller('rol')
 export class RolController {
@@ -17,11 +18,13 @@ export class RolController {
     }
 
     @Post()
+    @UseGuards(JwtAuthGuard)
     create(@Body() dto: CreateRolDto){
         return this.RolService.create(dto);
     }
 
     @Patch(':id')
+    @UseGuards(JwtAuthGuard)
     update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: CreateRolDto,) {
@@ -29,6 +32,7 @@ export class RolController {
     }
 
     @Delete(':id')
+    @UseGuards(JwtAuthGuard)
     remove(@Param('id', ParseIntPipe) id:number){
         return this.RolService.remove(id);
     }

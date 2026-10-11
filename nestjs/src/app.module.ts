@@ -8,6 +8,7 @@ import { HorarioModule } from './horario/horario.module.js';
 import { JustificanteModule } from './justificante/justificante.module.js';
 import { AsistenciaModule } from './asistencia/asistencia.module.js';
 import {UsuarioModule} from './usuario/usuario.module.js'
+import { AuthModule } from './auth/auth.module.js';
 
 
 @Module({
@@ -30,7 +31,8 @@ import {UsuarioModule} from './usuario/usuario.module.js'
     HorarioModule,
     JustificanteModule,
     AsistenciaModule,
-    UsuarioModule
+    UsuarioModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

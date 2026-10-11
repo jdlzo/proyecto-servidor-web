@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { JustificanteService } from './justificante.service.js';
 import { CreateJustificanteDto } from './dto/justificante.dto.js';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 
 @Controller('justificante')
 export class justificanteController {
@@ -19,11 +20,13 @@ export class justificanteController {
 
 
     @Post()
+    @UseGuards(JwtAuthGuard)
     create(@Body() dto: CreateJustificanteDto) {
     return this.justificanteService.create(dto);
     }
 
     @Patch(':id')
+    @UseGuards(JwtAuthGuard)
     update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: CreateJustificanteDto,
@@ -33,6 +36,7 @@ export class justificanteController {
 
 
     @Delete(':id')
+    @UseGuards(JwtAuthGuard)
     remove(@Param('id', ParseIntPipe) id: number) {
         return this.justificanteService.remove(id);
     }

@@ -15,7 +15,7 @@ export class usuario {
     @Column({ type: 'varchar', length: 100 })
     apellido: string;
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'varchar', length: 255, select: false })
     contrasena: string;
 
     @Column({ type: 'varchar', length: 100 })
@@ -25,10 +25,10 @@ export class usuario {
     estado: boolean;
 
     @Column({ type: 'int', nullable: true })
-    rolid: number;
+    rolid: number | null;
 
     @Column({ type: 'int', nullable: true })
-    horarioid: number;
+    horarioid: number | null;
 
 
     @ManyToOne(() => rol, { onDelete: 'RESTRICT' })
