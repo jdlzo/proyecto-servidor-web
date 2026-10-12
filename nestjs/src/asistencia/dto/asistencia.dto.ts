@@ -1,5 +1,5 @@
-import { IsInt, IsNotEmpty, IsDateString, IsString, MaxLength, Matches, IsOptional } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsDateString, IsString, MaxLength, Matches, IsOptional, Min, Max, IsIn } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 import { PartialType } from '@nestjs/mapped-types';
 
 export class CreateAsistenciaDto {
@@ -33,8 +33,9 @@ export class UpdateAsistenciaDto extends PartialType(CreateAsistenciaDto) {}
 
 export class FilterAsistenciaDto {
     @IsOptional()
-    @Transform(({ value }) => (value ? parseInt(value, 10) : undefined))
+    @Type(() => Number)
     @IsInt()
+    @Min(1)
     usuarioid?: number;
 
     @IsOptional()
@@ -42,6 +43,28 @@ export class FilterAsistenciaDto {
     fecha?: string;
 
     @IsOptional()
-    @IsString()
+    @IsIn(['A_TIEMPO', 'ATRASO', 'FALTA', 'JUSTIFICADO'])
     estado?: string;
+
+    @IsOptional()
+    @Type(() => Number)
+    @IsInt()
+    @Min(1)
+    page = 1;
+
+    @IsOptional()
+    @Type(() => Number)
+    @IsInt()
+    @Min(1)
+    @Max(100)
+    limit = 10;
+
+    @IsOptional()
+    @IsIn(['id', 'usuarioid', 'fecha', 'hora_entrada', 'hora_salida', 'estado'])
+    sortBy = 'fecha';
+
+    @IsOptional()
+    @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
+    @IsIn(['ASC', 'DESC'])
+    sortOrder = 'DESC';
 }
