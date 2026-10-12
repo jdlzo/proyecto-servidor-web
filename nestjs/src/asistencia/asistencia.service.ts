@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, Repository } from 'typeorm';
 import { asistencia } from './entities/asistencia.entity.js'; 
 import { CreateAsistenciaDto, UpdateAsistenciaDto, FilterAsistenciaDto } from './dto/asistencia.dto.js';
 
@@ -11,8 +11,12 @@ export class AsistenciaService {
         private readonly asistenciaRepository: Repository<asistencia>,
     ) {}
 
-    async findAll(filters: FilterAsistenciaDto): Promise<asistencia[]> {
-        const where: any = {};
+    async findAll(filters: FilterAsistenciaDto) {
+        const where: FindOptionsWhere<asistencia> = {};
+        const page = filters.page ?? 1;
+        const limit = filters.limit ?? 10;
+        const sortBy = filters.sortBy ?? 'fecha';
+        const sortOrder = filters.sortOrder ?? 'DESC';
 
         if (filters.usuarioid !== undefined) {
             where.usuarioid = filters.usuarioid;
@@ -24,7 +28,29 @@ export class AsistenciaService {
             where.estado = filters.estado;
         }
 
-        return await this.asistenciaRepository.find({ where });
+        const order = { [sortBy]: sortOrder } as FindOptionsOrder<asistencia>;
+        const [data, totalItems] = await this.asistenciaRepository.findAndCount({
+            where,
+            skip: (page - 1) * limit,
+            take: limit,
+            order,
+        });
+
+        const totalPages = Math.ceil(totalItems / limit);
+
+        return {
+            data,
+            meta: {
+                page,
+                limit,
+                totalItems,
+                totalPages,
+                hasNextPage: page < totalPages,
+                hasPreviousPage: page > 1,
+                sortBy,
+                sortOrder,
+            },
+        };
     }
 
     async findOne(id: number): Promise<asistencia> {
